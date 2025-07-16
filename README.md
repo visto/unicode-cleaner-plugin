@@ -285,7 +285,7 @@ cd intellij-plugin
 
 - 🐛 **Report bugs**: [GitHub Issues](https://github.com/unicodecleaner/intellij-plugin/issues)
 - 💬 **Ask questions**: [GitHub Discussions](https://github.com/unicodecleaner/intellij-plugin/discussions)
-- 📧 **Contact**: support@unicodecleaner.com
+- 📧 **Contact**: kontakt@stoitschev.de
 
 ## 📋 FAQ
 
@@ -356,4 +356,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Made with ❤️ for content creators who want their text to appear naturally human-typed.**
 
-*For more tools and resources, visit [unicodecleaner.com](https://unicodecleaner.com)*
+*For more tools and resources, visit [stoitschev.de](https://stoitschev.de)*
