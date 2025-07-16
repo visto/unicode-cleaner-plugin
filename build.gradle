@@ -1,0 +1,151 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '1.17.2'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.0'
+}
+
+group = 'com.unicodecleaner'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+// Configure Gradle IntelliJ Plugin
+intellij {
+    version = '2023.1.5'
+    type = 'IC' // IntelliJ IDEA Community Edition
+
+    plugins = [
+            'Git4Idea',
+            'markdown'
+    ]
+
+    downloadSources = true
+    updateSinceUntilBuild = false
+}
+
+dependencies {
+    // Testing dependencies
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    testImplementation 'org.mockito:mockito-core:5.1.1'
+    testImplementation 'org.assertj:assertj-core:3.24.2'
+
+    // Additional dependencies for Unicode handling
+    implementation 'com.ibm.icu:icu4j:72.1'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs.addAll(['-Xlint:deprecation', '-Xlint:unchecked'])
+}
+
+patchPluginXml {
+    sinceBuild = '231'
+    untilBuild = '251.*'
+
+    changeNotes = """
+        <h3>Version 1.0.0</h3>
+        <ul>
+            <li>Initial release with comprehensive Unicode character detection</li>
+            <li>Real-time highlighting and quick fixes</li>
+            <li>Bulk cleaning operations for files and projects</li>
+            <li>Configurable character categories and file types</li>
+            <li>Git pre-commit hook integration</li>
+            <li>Performance optimized for large files</li>
+        </ul>
+    """
+}
+
+signPlugin {
+    certificateChain = System.getenv("CERTIFICATE_CHAIN")
+    privateKey = System.getenv("PRIVATE_KEY")
+    password = System.getenv("PRIVATE_KEY_PASSWORD")
+}
+
+publishPlugin {
+    token = System.getenv("PUBLISH_TOKEN")
+    channels = ['default']
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+runIde {
+    jvmArgs = [
+            '-Xmx2048m',
+            '-XX:+UnlockDiagnosticVMOptions',
+            '-XX:+DebugNonSafepoints'
+    ]
+}
+
+buildPlugin {
+    archiveFileName = "${project.name}-${project.version}.zip"
+}
+
+// Custom task for running tests with coverage
+task testWithCoverage(type: Test) {
+    group = 'testing'
+    description = 'Run tests with coverage reporting'
+    useJUnitPlatform()
+    finalizedBy 'jacocoTestReport'
+}
+
+// Performance testing task
+task performanceTest(type: Test) {
+    group = 'verification'
+    description = 'Run performance tests'
+    useJUnitPlatform()
+    include '**/performance/**'
+
+    systemProperty 'test.performance', 'true'
+    maxHeapSize = '4g'
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+    }
+}
+
+// Generate test data task
+task generateTestData(type: JavaExec) {
+    group = 'development'
+    description = 'Generate Unicode test data files'
+
+    classpath = sourceSets.test.runtimeClasspath
+    mainClass = 'com.unicodecleaner.testutils.TestDataGenerator'
+
+    doFirst {
+        mkdir "${projectDir}/src/test/resources/testdata"
+    }
+}
+
+// Documentation generation
+task generateDocs(type: Javadoc) {
+    group = 'documentation'
+    description = 'Generate API documentation'
+
+    source = sourceSets.main.allJava
+    classpath = configurations.compileClasspath
+    destinationDir = file("${buildDir}/docs/javadoc")
+
+    options {
+        encoding = 'UTF-8'
+        charSet = 'UTF-8'
+        author = true
+        version = true
+        use = true
+        windowTitle = "Unicode Cleaner Plugin API"
+        docTitle = "Unicode Cleaner Plugin API Documentation"
+    }
+}

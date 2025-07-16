@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<idea-plugin>
+    <!-- Plugin metadata -->
+    <id>com.unicodecleaner.intellij</id>
+    <name>Unicode Text Cleaner</name>
+    <version>1.0.0</version>
+    <vendor email="kontakt@stoitschev.de" url="https://github.com/visto/unicode-cleaner-plugin">
+        Viktor Stoitschev
+    </vendor>
+
+    <!-- Plugin description -->
+    <description><![CDATA[
+        <h2>Unicode Text Cleaner</h2>
+        <p>
+            Detects and cleans problematic Unicode characters that can trigger AI detection systems 
+            or cause compatibility issues. Helps normalize text to use standard ASCII characters.
+        </p>
+        
+        <h3>Features:</h3>
+        <ul>
+            <li><strong>Real-time Detection:</strong> Highlights problematic Unicode characters as you type</li>
+            <li><strong>Smart Replacements:</strong> Suggests ASCII equivalents for smart quotes, em-dashes, and more</li>
+            <li><strong>Bulk Operations:</strong> Clean entire files or projects with one click</li>
+            <li><strong>Git Integration:</strong> Pre-commit hooks to prevent Unicode issues</li>
+            <li><strong>Configurable:</strong> Enable/disable specific character categories</li>
+            <li><strong>Performance Optimized:</strong> Fast detection even for large files</li>
+        </ul>
+        
+        <h3>Detected Character Types:</h3>
+        <ul>
+            <li>Hidden/Control Characters (zero-width spaces, soft hyphens, etc.)</li>
+            <li>Smart Quotes & Apostrophes (" " ' ')</li>
+            <li>Em & En Dashes (— –)</li>
+            <li>Ellipsis & Bullets (… •)</li>
+            <li>Full-Width Characters (ＡＢＣ１２３)</li>
+            <li>Non-Standard Spaces (non-breaking, ideographic, etc.)</li>
+            <li>Variation Selectors</li>
+        </ul>
+        
+        <p>
+            Perfect for content creators, developers, and anyone who needs to ensure their text 
+            uses standard ASCII characters for maximum compatibility and to avoid AI detection false positives.
+        </p>
+    ]]></description>
+
+    <!-- Change log -->
+    <change-notes><![CDATA[
+        <h3>Version 1.0.0</h3>
+        <ul>
+            <li>Initial release</li>
+            <li>Real-time Unicode character detection</li>
+            <li>Quick fixes for individual characters and bulk operations</li>
+            <li>Configurable settings panel</li>
+            <li>Support for 50+ problematic Unicode characters</li>
+            <li>File type filtering</li>
+            <li>Performance optimizations for large files</li>
+        </ul>
+    ]]></change-notes>
+
+    <!-- Compatibility -->
+    <idea-version since-build="231.0" until-build="251.*"/>
+
+    <!-- Plugin dependencies -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+
+    <!-- Extensions -->
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Settings -->
+        <applicationService 
+            serviceImplementation="com.unicodecleaner.settings.UnicodeCleanerSettings"/>
+        
+        <applicationConfigurable 
+            instance="com.unicodecleaner.settings.UnicodeCleanerConfigurable"
+            displayName="Unicode Cleaner"
+            id="unicode.cleaner.settings"/>
+
+        <!-- Inspections -->
+        <localInspection 
+            implementationClass="com.unicodecleaner.inspections.UnicodeCharacterInspection"
+            displayName="Unicode Character Issues"
+            groupName="Text Quality"
+            shortName="UnicodeCharacterIssues"
+            enabledByDefault="true"
+            level="WARNING"
+            groupPath="General,Text Quality"/>
+    </extensions>
+
+    <!-- Actions -->
+    <actions>
+        <!-- Main menu actions -->
+        <group id="UnicodeCleanerActionGroup" text="Unicode Cleaner" popup="true">
+            <add-to-group group-id="EditMenu" anchor="last"/>
+            <separator/>
+            
+            <action id="CleanCurrentFile"
+                    class="com.unicodecleaner.actions.CleanCurrentFileAction"
+                    text="Clean Unicode Characters in File"
+                    description="Clean all Unicode characters in the current file">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl shift U"/>
+            </action>
+            
+            <action id="CleanSelectedText"
+                    class="com.unicodecleaner.actions.CleanSelectedTextAction"
+                    text="Clean Selected Text"
+                    description="Clean Unicode characters in selected text">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt U"/>
+            </action>
+            
+            <action id="CleanProject"
+                    class="com.unicodecleaner.actions.CleanProjectAction"
+                    text="Clean Unicode Characters in Project"
+                    description="Clean all Unicode characters in the entire project"/>
+            
+            <action id="ShowUnicodeIssues"
+                    class="com.unicodecleaner.actions.ShowUnicodeIssuesAction"
+                    text="Show Unicode Issues"
+                    description="Show all Unicode issues in the project"/>
+                    
+            <separator/>
+            
+            <action id="UnicodeCleanerSettings"
+                    class="com.unicodecleaner.actions.OpenSettingsAction"
+                    text="Settings..."
+                    description="Open Unicode Cleaner settings"/>
+        </group>
+
+        <!-- Context menu actions -->
+        <action id="ContextCleanFile"
+                class="com.unicodecleaner.actions.CleanCurrentFileAction"
+                text="Clean Unicode Characters"
+                description="Clean Unicode characters in this file">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+
+        <!-- Project view actions -->
+        <action id="ProjectCleanFile"
+                class="com.unicodecleaner.actions.CleanSelectedFilesAction"
+                text="Clean Unicode Characters"
+                description="Clean Unicode characters in selected files">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="last"/>
+        </action>
+
+        <!-- Toolbar actions -->
+        <action id="ToolbarCleanFile"
+                class="com.unicodecleaner.actions.CleanCurrentFileAction"
+                text="Clean Unicode"
+                description="Clean Unicode characters in current file"
+                icon="/icons/unicode-clean.png">
+            <add-to-group group-id="MainToolBar" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>

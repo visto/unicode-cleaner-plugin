@@ -1,0 +1,35 @@
+// Plugin management must be first
+pluginManagement {
+	repositories {
+		gradlePluginPortal()
+		mavenCentral()
+	}
+}
+
+rootProject.name = 'unicode-cleaner-plugin'
+
+// Configure dependency resolution
+dependencyResolutionManagement {
+	repositories {
+		mavenCentral()
+		gradlePluginPortal()
+		// JetBrains repository for IntelliJ Platform dependencies
+		maven { url = 'https://cache-redirector.jetbrains.com/intellij-dependencies' }
+	}
+
+	// Use version catalogs for dependency management
+	versionCatalogs {
+		libs {
+			// Define common library versions
+			version('junit', '5.9.2')
+			version('mockito', '5.1.1')
+			version('assertj', '3.24.2')
+
+			// Define library aliases
+			library('junit-api', 'org.junit.jupiter', 'junit-jupiter-api').versionRef('junit')
+			library('junit-engine', 'org.junit.jupiter', 'junit-jupiter-engine').versionRef('junit')
+			library('mockito-core', 'org.mockito', 'mockito-core').versionRef('mockito')
+			library('assertj-core', 'org.assertj', 'assertj-core').versionRef('assertj')
+		}
+	}
+}
