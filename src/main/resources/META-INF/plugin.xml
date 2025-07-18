@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <idea-plugin>
     <!-- Plugin metadata -->
-    <id>com.unicodecleaner.intellij</id>
+    <id>com.unicodecleaner</id>
     <name>Unicode Text Cleaner</name>
     <version>1.0.0</version>
     <vendor email="kontakt@stoitschev.de" url="https://github.com/visto/unicode-cleaner-plugin">

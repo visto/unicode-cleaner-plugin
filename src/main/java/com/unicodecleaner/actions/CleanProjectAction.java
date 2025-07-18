@@ -2,6 +2,7 @@ package com.unicodecleaner.actions;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
@@ -64,11 +65,13 @@ public class CleanProjectAction extends AnAction {
         indicator.setIndeterminate(false);
         indicator.setText("Scanning project files...");
         
-        // Get all files in the project
-        Collection<VirtualFile> allFiles = FileBasedIndex.getInstance()
-            .getContainingFiles(FileTypeIndex.NAME, 
-                com.intellij.openapi.fileTypes.PlainTextFileType.INSTANCE, 
-                GlobalSearchScope.projectScope(project));
+        // Get all files in the project - MUST be done in ReadAction
+        Collection<VirtualFile> allFiles = ReadAction.compute(() -> {
+            return FileBasedIndex.getInstance()
+                .getContainingFiles(FileTypeIndex.NAME, 
+                    com.intellij.openapi.fileTypes.PlainTextFileType.INSTANCE, 
+                    GlobalSearchScope.projectScope(project));
+        });
         
         // Add other file types
         List<VirtualFile> filesToProcess = new ArrayList<>();
