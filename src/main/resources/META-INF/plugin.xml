@@ -3,7 +3,7 @@
     <!-- Plugin metadata -->
     <id>com.unicodecleaner</id>
     <name>Unicode Text Cleaner</name>
-    <version>1.0.0</version>
+    <version>1.0.3</version>
     <vendor email="kontakt@stoitschev.de" url="https://github.com/visto/unicode-cleaner-plugin">
         Viktor Stoitschev
     </vendor>
@@ -45,6 +45,28 @@
 
     <!-- Change log -->
     <change-notes><![CDATA[
+        <h3>Version 1.0.3</h3>
+        <ul>
+            <li>Fixed internal API usage by replacing FileBasedIndex with ProjectFileIndex</li>
+            <li>Improved compliance with IntelliJ Platform API guidelines</li>
+            <li>Enhanced project file discovery using public APIs only</li>
+        </ul>
+        
+        <h3>Version 1.0.2</h3>
+        <ul>
+            <li>Extended IDE compatibility to support IntelliJ IDEA 2025.2.x</li>
+            <li>Fixed marketplace compatibility detection for newer IDE versions</li>
+        </ul>
+        
+        <h3>Version 1.0.1</h3>
+        <ul>
+            <li>Fixed AWT events issue in write actions that caused crashes</li>
+            <li>Fixed threading violations in project-wide cleaning operations</li>
+            <li>Improved plugin stability and compliance with IntelliJ Platform threading model</li>
+            <li>Resolved "Read access is allowed from inside read-action only" errors</li>
+            <li>Enhanced error handling for file operations</li>
+        </ul>
+        
         <h3>Version 1.0.0</h3>
         <ul>
             <li>Initial release</li>
@@ -58,7 +80,7 @@
     ]]></change-notes>
 
     <!-- Compatibility -->
-    <idea-version since-build="231.0" until-build="251.*"/>
+    <idea-version since-build="231.0" until-build="252.*"/>
 
     <!-- Plugin dependencies -->
     <depends>com.intellij.modules.platform</depends>

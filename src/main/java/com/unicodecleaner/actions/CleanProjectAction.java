@@ -10,11 +10,10 @@ import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VfsUtilCore;
+import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.search.FileTypeIndex;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.util.indexing.FileBasedIndex;
 import com.unicodecleaner.settings.UnicodeCleanerSettings;
 import com.unicodecleaner.utils.UnicodeDetector;
 import org.jetbrains.annotations.NotNull;
@@ -65,12 +64,19 @@ public class CleanProjectAction extends AnAction {
         indicator.setIndeterminate(false);
         indicator.setText("Scanning project files...");
         
-        // Get all files in the project - MUST be done in ReadAction
+        // Get all files in the project - Using ProjectFileIndex (public API)
         Collection<VirtualFile> allFiles = ReadAction.compute(() -> {
-            return FileBasedIndex.getInstance()
-                .getContainingFiles(FileTypeIndex.NAME, 
-                    com.intellij.openapi.fileTypes.PlainTextFileType.INSTANCE, 
-                    GlobalSearchScope.projectScope(project));
+            List<VirtualFile> files = new ArrayList<>();
+            ProjectFileIndex fileIndex = ProjectFileIndex.getInstance(project);
+            
+            VfsUtilCore.iterateChildrenRecursively(project.getBaseDir(), null, file -> {
+                if (!file.isDirectory() && fileIndex.isInContent(file)) {
+                    files.add(file);
+                }
+                return true;
+            });
+            
+            return files;
         });
         
         // Add other file types

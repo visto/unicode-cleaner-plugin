@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.unicodecleaner'
-version = '1.0.0'
+version = '1.0.3'
 
 repositories {
     mavenCentral()
@@ -48,9 +48,31 @@ tasks.withType(JavaCompile).configureEach {
 
 patchPluginXml {
     sinceBuild = '231'
-    untilBuild = '251.*'
+    untilBuild = '252.*'
 
     changeNotes = """
+        <h3>Version 1.0.3</h3>
+        <ul>
+            <li>Fixed internal API usage by replacing FileBasedIndex with ProjectFileIndex</li>
+            <li>Improved compliance with IntelliJ Platform API guidelines</li>
+            <li>Enhanced project file discovery using public APIs only</li>
+        </ul>
+        
+        <h3>Version 1.0.2</h3>
+        <ul>
+            <li>Extended IDE compatibility to support IntelliJ IDEA 2025.2.x</li>
+            <li>Fixed marketplace compatibility detection for newer IDE versions</li>
+        </ul>
+        
+        <h3>Version 1.0.1</h3>
+        <ul>
+            <li>Fixed AWT events issue in write actions that caused crashes</li>
+            <li>Fixed threading violations in project-wide cleaning operations</li>
+            <li>Improved plugin stability and compliance with IntelliJ Platform threading model</li>
+            <li>Resolved "Read access is allowed from inside read-action only" errors</li>
+            <li>Enhanced error handling for file operations</li>
+        </ul>
+        
         <h3>Version 1.0.0</h3>
         <ul>
             <li>Initial release with comprehensive Unicode character detection</li>
