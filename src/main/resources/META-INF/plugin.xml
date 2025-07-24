@@ -3,7 +3,7 @@
     <!-- Plugin metadata -->
     <id>com.unicodecleaner</id>
     <name>Unicode Text Cleaner</name>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <vendor email="kontakt@stoitschev.de" url="https://github.com/visto/unicode-cleaner-plugin">
         Viktor Stoitschev
     </vendor>
@@ -45,6 +45,14 @@
 
     <!-- Change log -->
     <change-notes><![CDATA[
+        <h3>Version 1.0.4</h3>
+        <ul>
+            <li>Significantly reduced plugin size from 13MB to ~50KB by removing unused ICU4J dependency</li>
+            <li>Improved plugin loading speed and reduced memory footprint</li>
+            <li>All Unicode detection functionality remains unchanged - using optimized pure Java implementation</li>
+            <li>Enhanced package distribution efficiency</li>
+        </ul>
+
         <h3>Version 1.0.3</h3>
         <ul>
             <li>Fixed internal API usage by replacing FileBasedIndex with ProjectFileIndex</li>
